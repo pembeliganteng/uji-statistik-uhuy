@@ -1,3 +1,4 @@
+// Ambil elemen-elemen yang diperlukan dari DOM
 const var1Select = document.getElementById('var1');
 const var2Container = document.getElementById('var2Container');
 const var2Select = document.getElementById('var2');
@@ -73,8 +74,8 @@ var2Select.addEventListener('change', function () {
     additionalOptions.style.display = 'block';
   } else if (var1Value === 'kontinyu' && var2Value === 'kontinyu') {
     additionalOptions.innerHTML = `
-      <label for="distribusi">Distribusi/Jumlah Sampel:</label>
-      <select id="distribusi" name="distribusi">
+      <label for="distribusi_jumlah">Distribusi/Jumlah Sampel:</label>
+      <select id="distribusi_jumlah" name="distribusi_jumlah">
         <option value="">Pilih Opsi</option>
         <option value="normal_besar">Normal/Besar (>30)</option>
         <option value="tidak_normal_kecil">Tidak Normal/Kecil (<30)</option>
@@ -122,16 +123,7 @@ additionalOptions.addEventListener('change', function (e) {
     }
   } else if (e.target.id === 'jumlahKelompok') {
     const jumlahKelompok = e.target.value;
-    if (jumlahKelompok === '2') {
-      additionalOptions.innerHTML += `
-        <label for="distribusi">Distribusi Data:</label>
-        <select id="distribusi" name="distribusi">
-          <option value="">Pilih Opsi</option>
-          <option value="normal">Normal</option>
-          <option value="tidak_normal">Tidak Normal</option>
-        </select>
-      `;
-    } else if (jumlahKelompok === '>=3') {
+    if (jumlahKelompok === '2' || jumlahKelompok === '>=3') {
       additionalOptions.innerHTML += `
         <label for="distribusi">Distribusi Data:</label>
         <select id="distribusi" name="distribusi">
@@ -143,16 +135,7 @@ additionalOptions.addEventListener('change', function (e) {
     }
   } else if (e.target.id === 'distribusi') {
     const distribusi = e.target.value;
-    if (distribusi === 'normal') {
-      additionalOptions.innerHTML += `
-        <label for="sifatSampel">Sifat Sampel:</label>
-        <select id="sifatSampel" name="sifatSampel">
-          <option value="">Pilih Opsi</option>
-          <option value="dependen">Dependen</option>
-          <option value="independen">Independen</option>
-        </select>
-      `;
-    } else if (distribusi === 'tidak_normal') {
+    if (distribusi === 'normal' || distribusi === 'tidak_normal') {
       additionalOptions.innerHTML += `
         <label for="sifatSampel">Sifat Sampel:</label>
         <select id="sifatSampel" name="sifatSampel">
@@ -167,37 +150,39 @@ additionalOptions.addEventListener('change', function (e) {
     const distribusi = document.getElementById('distribusi').value;
     const jumlahKelompok = document.getElementById('jumlahKelompok').value;
 
-    if (jumlahKelompok === '2') {
-      if (distribusi === 'normal') {
-        if (sifatSampel === 'dependen') {
-          testName = 't-paired';
-          explanationLink = 'https://en.wikipedia.org/wiki/Paired_difference_test';
-        } else if (sifatSampel === 'independen') {
-          testName = 't-independent';
-          explanationLink = 'https://en.wikipedia.org/wiki/Student%27s_t-test';
+    if (jumlahKelompok && distribusi && sifatSampel) {
+      if (jumlahKelompok === '2') {
+        if (distribusi === 'normal') {
+          if (sifatSampel === 'dependen') {
+            testName = 't-paired';
+            explanationLink = 'https://en.wikipedia.org/wiki/Paired_difference_test';
+          } else if (sifatSampel === 'independen') {
+            testName = 't-independent';
+            explanationLink = 'https://en.wikipedia.org/wiki/Student%27s_t-test';
+          }
+        } else if (distribusi === 'tidak_normal') {
+          if (sifatSampel === 'dependen') {
+            testName = 'Wilcoxon Match Pair';
+            explanationLink = 'https://en.wikipedia.org/wiki/Wilcoxon_signed-rank_test';
+          } else if (sifatSampel === 'independen') {
+            testName = 'Mann-Whitney U';
+            explanationLink = 'https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test';
+          }
         }
-      } else if (distribusi === 'tidak_normal') {
-        if (sifatSampel === 'dependen') {
-          testName = 'Wilcoxon Match Pair';
-          explanationLink = 'https://en.wikipedia.org/wiki/Wilcoxon_signed-rank_test';
-        } else if (sifatSampel === 'independen') {
-          testName = 'Mann-Whitney U';
-          explanationLink = 'https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test';
-        }
-      }
-    } else if (jumlahKelompok === '>=3') {
-      if (distribusi === 'normal') {
-        if (sifatSampel === 'independen') {
-          testName = 'ANOVA';
-          explanationLink = 'https://en.wikipedia.org/wiki/Analysis_of_variance';
-        }
-      } else if (distribusi === 'tidak_normal') {
-        if (sifatSampel === 'dependen') {
-          testName = 'Friedman';
-          explanationLink = 'https://en.wikipedia.org/wiki/Friedman_test';
-        } else if (sifatSampel === 'independen') {
-          testName = 'Kruskal Wallis H';
-          explanationLink = 'https://en.wikipedia.org/wiki/Kruskal%E2%80%93Wallis_one-way_analysis_of_variance';
+      } else if (jumlahKelompok === '>=3') {
+        if (distribusi === 'normal') {
+          if (sifatSampel === 'independen') {
+            testName = 'ANOVA';
+            explanationLink = 'https://en.wikipedia.org/wiki/Analysis_of_variance';
+          }
+        } else if (distribusi === 'tidak_normal') {
+          if (sifatSampel === 'dependen') {
+            testName = 'Friedman';
+            explanationLink = 'https://en.wikipedia.org/wiki/Friedman_test';
+          } else if (sifatSampel === 'independen') {
+            testName = 'Kruskal Wallis H';
+            explanationLink = 'https://en.wikipedia.org/wiki/Kruskal%E2%80%93Wallis_one-way_analysis_of_variance';
+          }
         }
       }
     }
@@ -212,8 +197,10 @@ additionalOptions.addEventListener('change', function (e) {
     }
   }
 
-  testResult.textContent = testName;
-  explanationButton.href = explanationLink;
-  explanationButton.style.display = 'block';
-  resultDiv.style.display = 'block';
+  if (testName) {
+    testResult.textContent = testName;
+    explanationButton.href = explanationLink;
+    explanationButton.style.display = 'block';
+    resultDiv.style.display = 'block';
+  }
 });

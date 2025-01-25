@@ -52,3 +52,11 @@ body {
   #resetButton:hover {
     background-color: #cc0000;
   }
+
+  select:invalid {
+    border: 1px solid red;
+  }
+  
+  select:valid {
+    border: 1px solid green;
+  }
