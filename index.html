@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Penentuan Uji Statistik</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Penentuan Uji Statistik</h1>
+  <form id="statForm">
+    <!-- Variabel 1 -->
+    <label for="var1">Jenis Variabel 1:</label>
+    <select id="var1" name="var1" required>
+      <option value="">Pilih Jenis Variabel 1</option>
+      <option value="kategorik">Kategorik</option>
+      <option value="kontinyu">Kontinyu</option>
+    </select>
+
+    <!-- Variabel 2 (akan muncul berdasarkan pilihan Variabel 1) -->
+    <div id="var2Container" style="display: none;">
+      <label for="var2">Jenis Variabel 2:</label>
+      <select id="var2" name="var2">
+        <option value="">Pilih Jenis Variabel 2</option>
+        <option value="kategorik">Kategorik</option>
+        <option value="kontinyu">Kontinyu</option>
+      </select>
+    </div>
+
+    <!-- Opsi tambahan (akan muncul berdasarkan pilihan sebelumnya) -->
+    <div id="additionalOptions" style="display: none;"></div>
+
+    <!-- Hasil -->
+    <div id="result" style="display: none;">
+      <h2>Uji Statistik yang Direkomendasikan:</h2>
+      <p id="testResult"></p>
+      <!-- Tombol Penjelasan -->
+      <a id="explanationButton" href="#" target="_blank" style="display: none;">
+        <button>Penjelasan Uji Statistik</button>
+      </a>
+    </div>
+
+    <!-- Tombol Reset -->
+    <button type="button" id="resetButton">Reset</button>
+  </form>
+
+  <script src="script.js"></script>
+</body>
+</html>
