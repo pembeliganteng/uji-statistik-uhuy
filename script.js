@@ -197,10 +197,14 @@ additionalOptions.addEventListener('change', function (e) {
     }
   }
 
+  // Tampilkan hasil hanya jika semua dropdown terjawab
   if (testName) {
     testResult.textContent = testName;
     explanationButton.href = explanationLink;
     explanationButton.style.display = 'block';
     resultDiv.style.display = 'block';
+  } else {
+    resultDiv.style.display = 'none';
+    explanationButton.style.display = 'none';
   }
 });
