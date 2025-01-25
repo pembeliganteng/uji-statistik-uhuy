@@ -24,21 +24,7 @@ body {
     background-color: #f0f0f0;
     border-radius: 5px;
   }
-
-  #resetButton {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
   
-  #resetButton:hover {
-    background-color: #cc0000;
-  }
-
   #explanationButton button {
     margin-top: 10px;
     padding: 10px 20px;
@@ -51,4 +37,18 @@ body {
   
   #explanationButton button:hover {
     background-color: #45a049;
+  }
+  
+  #resetButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #resetButton:hover {
+    background-color: #cc0000;
   }

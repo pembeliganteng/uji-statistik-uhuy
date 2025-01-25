@@ -9,32 +9,31 @@ const explanationButton = document.getElementById('explanationButton');
 
 // Fungsi untuk mereset form
 function resetForm() {
-  var1Select.value = ''; // Reset Variabel 1
-  var2Select.value = ''; // Reset Variabel 2
-  var2Container.style.display = 'none'; // Sembunyikan Variabel 2
-  additionalOptions.innerHTML = ''; // Hapus opsi tambahan
-  additionalOptions.style.display = 'none'; // Sembunyikan opsi tambahan
-  resultDiv.style.display = 'none'; // Sembunyikan hasil
-  testResult.textContent = ''; // Kosongkan teks hasil
-  explanationButton.style.display = 'none'; // Sembunyikan tombol penjelasan
+  var1Select.value = '';
+  var2Select.value = '';
+  var2Container.style.display = 'none';
+  additionalOptions.innerHTML = '';
+  additionalOptions.style.display = 'none';
+  resultDiv.style.display = 'none';
+  testResult.textContent = '';
+  explanationButton.style.display = 'none';
 }
 
 // Event listener untuk tombol reset
 resetButton.addEventListener('click', resetForm);
 
-// Logika sebelumnya (tetap dipertahankan)
+// Event listener untuk Variabel 1
 var1Select.addEventListener('change', function () {
   const var1Value = var1Select.value;
 
   if (var1Value === 'kategorik' || var1Value === 'kontinyu') {
     var2Container.style.display = 'block';
   } else {
-    var2Container.style.display = 'none';
-    additionalOptions.style.display = 'none';
-    resultDiv.style.display = 'none';
+    resetForm();
   }
 });
 
+// Event listener untuk Variabel 2
 var2Select.addEventListener('change', function () {
   const var1Value = var1Select.value;
   const var2Value = var2Select.value;
@@ -54,6 +53,26 @@ var2Select.addEventListener('change', function () {
     additionalOptions.style.display = 'block';
   } else if (var1Value === 'kategorik' && var2Value === 'kontinyu') {
     additionalOptions.innerHTML = `
+      <label for="jumlahKelompok">Jumlah Kelompok Variabel 2:</label>
+      <select id="jumlahKelompok" name="jumlahKelompok">
+        <option value="">Pilih Opsi</option>
+        <option value="2">2</option>
+        <option value=">=3">>=3</option>
+      </select>
+    `;
+    additionalOptions.style.display = 'block';
+  } else if (var1Value === 'kontinyu' && var2Value === 'kategorik') {
+    additionalOptions.innerHTML = `
+      <label for="jumlahKelompok">Jumlah Kelompok Variabel 2:</label>
+      <select id="jumlahKelompok" name="jumlahKelompok">
+        <option value="">Pilih Opsi</option>
+        <option value="2">2</option>
+        <option value=">=3">>=3</option>
+      </select>
+    `;
+    additionalOptions.style.display = 'block';
+  } else if (var1Value === 'kontinyu' && var2Value === 'kontinyu') {
+    additionalOptions.innerHTML = `
       <label for="distribusi">Distribusi/Jumlah Sampel:</label>
       <select id="distribusi" name="distribusi">
         <option value="">Pilih Opsi</option>
@@ -67,12 +86,15 @@ var2Select.addEventListener('change', function () {
   }
 });
 
+// Event listener untuk opsi tambahan
 additionalOptions.addEventListener('change', function (e) {
+  const var1Value = var1Select.value;
+  const var2Value = var2Select.value;
+  let testName = '';
+  let explanationLink = '';
+
   if (e.target.id === 'yangDicari') {
     const yangDicari = e.target.value;
-    let testName = '';
-    let explanationLink = '';
-
     switch (yangDicari) {
       case 'asosiasi':
         testName = 'Chi-Square';
@@ -98,33 +120,100 @@ additionalOptions.addEventListener('change', function (e) {
         testName = '';
         explanationLink = '#';
     }
-
-    testResult.textContent = testName;
-    explanationButton.href = explanationLink;
-    explanationButton.style.display = 'block';
-    resultDiv.style.display = 'block';
+  } else if (e.target.id === 'jumlahKelompok') {
+    const jumlahKelompok = e.target.value;
+    if (jumlahKelompok === '2') {
+      additionalOptions.innerHTML += `
+        <label for="distribusi">Distribusi Data:</label>
+        <select id="distribusi" name="distribusi">
+          <option value="">Pilih Opsi</option>
+          <option value="normal">Normal</option>
+          <option value="tidak_normal">Tidak Normal</option>
+        </select>
+      `;
+    } else if (jumlahKelompok === '>=3') {
+      additionalOptions.innerHTML += `
+        <label for="distribusi">Distribusi Data:</label>
+        <select id="distribusi" name="distribusi">
+          <option value="">Pilih Opsi</option>
+          <option value="normal">Normal</option>
+          <option value="tidak_normal">Tidak Normal</option>
+        </select>
+      `;
+    }
   } else if (e.target.id === 'distribusi') {
     const distribusi = e.target.value;
-    let testName = '';
-    let explanationLink = '';
-
-    switch (distribusi) {
-      case 'normal_besar':
-        testName = 'Korelasi Pearson atau Regresi';
-        explanationLink = 'https://en.wikipedia.org/wiki/Pearson_correlation_coefficient';
-        break;
-      case 'tidak_normal_kecil':
-        testName = 'Korelasi Spearman';
-        explanationLink = 'https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient';
-        break;
-      default:
-        testName = '';
-        explanationLink = '#';
+    if (distribusi === 'normal') {
+      additionalOptions.innerHTML += `
+        <label for="sifatSampel">Sifat Sampel:</label>
+        <select id="sifatSampel" name="sifatSampel">
+          <option value="">Pilih Opsi</option>
+          <option value="dependen">Dependen</option>
+          <option value="independen">Independen</option>
+        </select>
+      `;
+    } else if (distribusi === 'tidak_normal') {
+      additionalOptions.innerHTML += `
+        <label for="sifatSampel">Sifat Sampel:</label>
+        <select id="sifatSampel" name="sifatSampel">
+          <option value="">Pilih Opsi</option>
+          <option value="dependen">Dependen</option>
+          <option value="independen">Independen</option>
+        </select>
+      `;
     }
+  } else if (e.target.id === 'sifatSampel') {
+    const sifatSampel = e.target.value;
+    const distribusi = document.getElementById('distribusi').value;
+    const jumlahKelompok = document.getElementById('jumlahKelompok').value;
 
-    testResult.textContent = testName;
-    explanationButton.href = explanationLink;
-    explanationButton.style.display = 'block';
-    resultDiv.style.display = 'block';
+    if (jumlahKelompok === '2') {
+      if (distribusi === 'normal') {
+        if (sifatSampel === 'dependen') {
+          testName = 't-paired';
+          explanationLink = 'https://en.wikipedia.org/wiki/Paired_difference_test';
+        } else if (sifatSampel === 'independen') {
+          testName = 't-independent';
+          explanationLink = 'https://en.wikipedia.org/wiki/Student%27s_t-test';
+        }
+      } else if (distribusi === 'tidak_normal') {
+        if (sifatSampel === 'dependen') {
+          testName = 'Wilcoxon Match Pair';
+          explanationLink = 'https://en.wikipedia.org/wiki/Wilcoxon_signed-rank_test';
+        } else if (sifatSampel === 'independen') {
+          testName = 'Mann-Whitney U';
+          explanationLink = 'https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test';
+        }
+      }
+    } else if (jumlahKelompok === '>=3') {
+      if (distribusi === 'normal') {
+        if (sifatSampel === 'independen') {
+          testName = 'ANOVA';
+          explanationLink = 'https://en.wikipedia.org/wiki/Analysis_of_variance';
+        }
+      } else if (distribusi === 'tidak_normal') {
+        if (sifatSampel === 'dependen') {
+          testName = 'Friedman';
+          explanationLink = 'https://en.wikipedia.org/wiki/Friedman_test';
+        } else if (sifatSampel === 'independen') {
+          testName = 'Kruskal Wallis H';
+          explanationLink = 'https://en.wikipedia.org/wiki/Kruskal%E2%80%93Wallis_one-way_analysis_of_variance';
+        }
+      }
+    }
+  } else if (e.target.id === 'distribusi_jumlah') {
+    const distribusiJumlah = e.target.value;
+    if (distribusiJumlah === 'normal_besar') {
+      testName = 'Korelasi Pearson atau Regresi';
+      explanationLink = 'https://en.wikipedia.org/wiki/Pearson_correlation_coefficient';
+    } else if (distribusiJumlah === 'tidak_normal_kecil') {
+      testName = 'Korelasi Spearman';
+      explanationLink = 'https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient';
+    }
   }
+
+  testResult.textContent = testName;
+  explanationButton.href = explanationLink;
+  explanationButton.style.display = 'block';
+  resultDiv.style.display = 'block';
 });
